@@ -1,14 +1,21 @@
-require("dotenv").config({ path: "./.env" });
+if (process.env.NODE_ENV == "production") {
+  require("dotenv").config({ path: "./.env.production" });
+} else {
+  require("dotenv").config({ path: "./.env" });
+}
+
 const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
-const os = require('os');
+const os = require("os");
 
 // Create Express app
 const app = express();
 
 // Use bodyParser to parse JSON requests
 app.use(bodyParser.json());
+
+console.log(process.env.NODE_ENV);
 
 // Create MySQL connection
 const connection = mysql.createConnection({
@@ -54,7 +61,7 @@ app.post("/task", (req, res) => {
 // API route to get all tasks (GET)
 app.get("/tasks", (req, res) => {
   const query = "SELECT * FROM task";
-  
+
   connection.query(query, (err, results) => {
     if (err) {
       console.error("Error fetching tasks: " + err.stack);
@@ -70,23 +77,21 @@ app.get("/tasks", (req, res) => {
 
 // API route to get all tasks (GET)
 app.get("/", (req, res) => {
-  const clientIp = req.header('x-forwarded-for');
+  const clientIp = req.header("x-forwarded-for");
   const elbIP = req.socket.remoteAddress;
   const containerIp = req.socket.localAddress;
   const containerName = os.hostname();
 
-  console.log('Hello Amazon ECS from VietAWS!');
+  console.log("Hello Amazon ECS!");
 
   res.status(200).json({
-    serviceName: 'ECS User Microservice',
+    serviceName: "ECS User Microservice",
     clientIp: clientIp,
     elbIP: elbIP,
     containerIp: containerIp,
     containerName: containerName,
   });
 });
-
-
 
 // Start the Express server
 const port = process.env.HTTP_PORT || 8080;
