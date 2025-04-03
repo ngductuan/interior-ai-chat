@@ -10,13 +10,18 @@ const app = express();
 // Use bodyParser to parse JSON requests
 app.use(bodyParser.json());
 
-app.use(cors());
+// app.use(cors());
 
 app.use(
   cors({
-    origin: "*",
+    origin: "*", // allow all domains (you can restrict to specific origins if needed)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// Handle pre-flight requests (OPTIONS)
+// app.options("*", cors());
 
 if (process.env.NODE_ENV == "production") {
   require("dotenv").config({ path: "./.env.production" });
