@@ -34,6 +34,8 @@ export default {
 
     const apiUrl = import.meta.env.VITE_API_URL; // Use the environment variable
 
+    console.log("API URL:", apiUrl);
+
     // Fetch tasks when the app is mounted
     const fetchTasks = async () => {
       try {

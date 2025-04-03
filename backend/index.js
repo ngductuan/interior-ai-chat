@@ -114,7 +114,7 @@ app.get("/ping", (req, res) => {
 });
 
 // API route to get all tasks (GET)
-app.get("/", (req, res) => {
+app.get("/task/get-ip", (req, res) => {
   const clientIp = req.header("x-forwarded-for");
   const elbIP = req.socket.remoteAddress;
   const containerIp = req.socket.localAddress;
