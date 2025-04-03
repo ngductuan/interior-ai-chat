@@ -77,7 +77,7 @@ export default {
 
     const getIPDestination = async () => {
       try {
-        const response = await axios.get(`${apiUrl}`);
+        const response = await axios.get(`${apiUrl}/task/get-ip`);
         ipData.value = response.data;
       } catch (error) {
         console.error("Error fetching IP address:", error);
