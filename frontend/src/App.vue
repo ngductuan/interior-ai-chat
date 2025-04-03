@@ -39,7 +39,7 @@ export default {
     // Fetch tasks when the app is mounted
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/task`);
+        const response = await axios.get(`${apiUrl}/task/`);
         tasks.value = response.data.tasks;
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -54,7 +54,7 @@ export default {
       }
 
       try {
-        const response = await axios.post(`${apiUrl}/task`, {
+        const response = await axios.post(`${apiUrl}/task/`, {
           title: newTask.value,
         });
         fetchTasks(); // Refresh the task list
