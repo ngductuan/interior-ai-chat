@@ -73,7 +73,7 @@ app.post("/task", (req, res) => {
 });
 
 // API route to get all tasks (GET)
-app.get("/tasks", (req, res) => {
+app.get("/task", (req, res) => {
   const query = "SELECT * FROM task";
 
   connection.query(query, (err, results) => {
