@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+    <ul class="ip-data">
+      <li v-for="(value, key) in ipData" :key="key">{{ key }}: {{ value }}</li>
+    </ul>
+
     <h1>Todo App</h1>
 
     <div id="task-form">
@@ -8,7 +12,7 @@
     </div>
 
     <h2>Task List</h2>
-    <ul>
+    <ul class="task-list">
       <li v-for="task in tasks" :key="task.id">
         {{ task.title }}
         <button @click="deleteTask(task.id)" class="delete-btn">🗑</button>
@@ -26,6 +30,7 @@ export default {
   setup() {
     const newTask = ref("");
     const tasks = ref([]);
+    const ipData = ref({});
 
     const apiUrl = import.meta.env.VITE_API_URL; // Use the environment variable
 
@@ -50,7 +55,6 @@ export default {
         const response = await axios.post(`${apiUrl}/task`, {
           title: newTask.value,
         });
-        console.log(response.data.message);
         fetchTasks(); // Refresh the task list
       } catch (error) {
         console.error("Error creating task:", error);
@@ -63,17 +67,28 @@ export default {
     const deleteTask = async (taskId) => {
       try {
         const response = await axios.delete(`${apiUrl}/task/${taskId}`);
-        console.log(response.data.message);
         fetchTasks(); // Refresh the task list after deleting
       } catch (error) {
         console.error("Error deleting task:", error);
       }
     };
 
+    const getIPDestination = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}`);
+        ipData.value = response.data;
+      } catch (error) {
+        console.error("Error fetching IP address:", error);
+      }
+    };
+
     // Fetch tasks on component mount
     onMounted(fetchTasks);
+    onMounted(() => {
+      getIPDestination();
+    });
 
-    return { newTask, tasks, createTask, deleteTask };
+    return { newTask, tasks, createTask, deleteTask, ipData };
   },
 };
 </script>
@@ -144,13 +159,13 @@ h2 {
   margin-bottom: 20px;
 }
 
-ul {
+.task-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-li {
+.task-list li {
   padding: 12px 20px;
   font-size: 18px;
   background-color: #f9f9f9;
@@ -161,6 +176,24 @@ li {
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: darkorange;
+}
+
+.ip-data {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.ip-data li {
+  padding: 12px 20px;
+  font-size: 18px;
+  background-color: #f9f9f9;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
 }
 
 li button {

@@ -106,6 +106,13 @@ app.delete("/task/:id", (req, res) => {
   });
 });
 
+// Ping API route (GET)
+app.get("/ping", (req, res) => {
+  res.status(200).json({
+    message: "Pong!",
+  });
+});
+
 // API route to get all tasks (GET)
 app.get("/", (req, res) => {
   const clientIp = req.header("x-forwarded-for");
